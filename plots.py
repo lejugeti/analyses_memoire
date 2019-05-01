@@ -35,6 +35,7 @@ def plot_individuel(data, subject_nb):
     plt.title(f"S{subject}")
     #plt.savefig(f"figures/figure_S{subject}.pdf")
     plt.show()
+    return data
 
 def plot_moyen(data):
     """
@@ -62,6 +63,6 @@ def plot_moyen(data):
     
 data = pd.read_csv("aggregated_data.txt")
 subject = 2
-plot_individuel(data, subject)
+ind = plot_individuel(data, subject)
 
 plot_moyen(data)
