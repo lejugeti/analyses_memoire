@@ -5,12 +5,13 @@ Created on Tue Apr 30 19:46:00 2019
 @author: Antoine
 """
 
-#%% plot des fonctions d'oubli 
+#%% initialisation des plots 
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-def plot_individuel(data, subject_nb):
+def plot_individuel(data, subject_nb, save=False):
     """
     Permet de plot les fonctions d'oubli individuelles d'un sujet pour AM et FM
     """
@@ -22,8 +23,8 @@ def plot_individuel(data, subject_nb):
     am = []
     for time in isi:
         #iat[0,5] pour prendre la valeur de percentage correct dans la ligne
-        fm.append(data[data.modulation_type == "FM"][data.ISI==time].iat[0, 5])
-        am.append(data[data.modulation_type == "AM"][data.ISI==time].iat[0, 5])
+        fm.append(data[data.modulation_type == "FM"][data.ISI== time].iat[0, 5])
+        am.append(data[data.modulation_type == "AM"][data.ISI== time].iat[0, 5])
     
     plt.plot(isi, fm, "o", color="red", linestyle="none", label="FM")
     plt.plot(isi, am, "o", color="blue", linestyle="none", label="AM")
@@ -33,11 +34,12 @@ def plot_individuel(data, subject_nb):
     plt.xlabel("ISI (condition)")
     plt.ylabel("percentage correct")
     plt.title(f"S{subject}")
-    #plt.savefig(f"figures/figure_S{subject}.pdf")
+    if save:
+        plt.savefig(f"figures/figure_S{subject}.pdf")
     plt.show()
     return data
 
-def plot_moyen(data):
+def plot_moyen(data, save=False):
     """
     plot les fonctions d'oubli moyennées pour AM et FM
     """
@@ -58,11 +60,18 @@ def plot_moyen(data):
     plt.xlabel("ISI (condition)")
     plt.ylabel("percentage correct")
     plt.title("averaged function")
-    #plt.savefig("figures/figure_moyenne.pdf")
+    if save:
+        plt.savefig("figures/figure_moyenne.pdf")
     plt.show()
     
 data = pd.read_csv("aggregated_data.txt")
-subject = 2
-ind = plot_individuel(data, subject)
+data["subject"] = data["subject"].astype("category")
+data["modulation_type"] = data["modulation_type"].astype("category")
+data["ISI"] = data["ISI"].astype("category")
 
-plot_moyen(data)
+#%%plot individuel
+subject = 1
+ind = plot_individuel(data, subject, save=False)
+
+#%% plot avec données moyennées
+plot_moyen(data, save=False)

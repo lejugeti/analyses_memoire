@@ -1,0 +1,5 @@
+% run#   track#   exppar1[Hz]   exppar2[N/A]   exppar3[N/A]   expvar[Hz]   n.pres   n.correct calscript   dateStamp   timeStamp
+1   1   500.00000000   0.76000000   FM   3.00000000   20   15   PC_HD600_audioengineD3   02-05-2019 15:38:15 
+1   1   500.00000000   0.76000000   FM   3.10000000   0   0   PC_HD600_audioengineD3   02-05-2019 15:38:15 
+2   1   500.00000000   0.76000000   AM   3.00000000   20   15   PC_HD600_audioengineD3   02-05-2019 15:49:36 
+2   1   500.00000000   0.76000000   AM   3.10000000   0   0   PC_HD600_audioengineD3   02-05-2019 15:49:36 

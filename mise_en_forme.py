@@ -7,11 +7,13 @@ Created on Tue Apr 30 08:26:31 2019
 #%% cleaning the matlab data
 import pandas as pd
 import os
+import glob
+import numpy as np
 
-raw_path = os.path.join("Results", "raw")
+raw_path = os.path.join("Results", "raw", "Discrimination2_CS_AM_and_FM_ISI*.dat")
 
-for filename in os.listdir(raw_path):
-    with open(os.path.join(raw_path, filename)) as file:
+for filename in glob.glob(raw_path):
+    with open(filename) as file:
         a = file.readlines()
         res = []
         for line in a:
@@ -32,10 +34,15 @@ for filename in os.listdir(raw_path):
     #drop arg to not insert index in dataframe when reseting
     clean_data.reset_index(drop=True, inplace=True)
     
-    clean_data["ISI"] = [filename[-8] for i in range(len(clean_data))]
+    splitted_names = filename.split(sep="_")
+    clean_data["ISI"] = [splitted_names[-2][-1] for i in range(len(clean_data))]
     clean_data = clean_data[["modulation_type", "ISI", "nb_presentation", "nb_correct"]]
     clean_data.index.name = "index"
-    clean_data.to_csv(os.path.join('Results', 'clean', f"ISI{filename[-8]}_S{filename[-5]}.txt"))
+    clean_data["subject"] = [splitted_names[-1].split(sep=".")[0][1:] for i in range(len(clean_data))]
+    
+    #on split une deuxième fois pour enlever le .dat qui restait après 1er split
+    clean_data.to_csv(os.path.join('Results', 'clean', 
+                                   f"{splitted_names[-2]}_{splitted_names[-1].split(sep='.')[0]}.txt"))
 
 #%% building the aggregated dataframe thanks to the cleaned files
 clean_path = os.path.join("Results", "clean")
@@ -43,7 +50,6 @@ clean_path = os.path.join("Results", "clean")
 clean_agg = pd.DataFrame()
 for filename in os.listdir(clean_path):
     data = pd.read_csv(os.path.join(clean_path, filename), index_col="index")
-    data["subject"] = [filename[-5] for i in range(len(data))]
     clean_agg = pd.concat([clean_agg, data], ignore_index=True)
 
 clean_agg[["modulation_type", "subject", "ISI"]] = clean_agg[["modulation_type", "subject", "ISI"]].astype("category")
@@ -60,7 +66,13 @@ tidy_data["percentage_correct"] = 100 * tidy_data.correct / tidy_data.presented
 tidy_data.to_csv("aggregated_data.txt")
 
 
+#%% build the mean data frame just in case
 
+data = pd.read_csv("aggregated_data.txt")
 
+data = data.groupby(["modulation_type", "ISI"])
+data = data.percentage_correct.apply(np.mean)
 
+data.to_csv("mean_data.txt")
+data.to_excel("mean_data.xlsx")
 

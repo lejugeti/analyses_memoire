@@ -1,2 +1,15 @@
-index,modulation_type,ISI,nb_presentation,nb_correct
-0,FM,2,20,16
+index,modulation_type,ISI,nb_presentation,nb_correct,subject
+0,FM,2,20,16,7
+1,AM,2,20,17,7
+2,FM,2,20,15,7
+3,AM,2,20,11,7
+4,AM,2,20,17,7
+5,FM,2,20,15,7
+6,AM,2,20,14,7
+7,FM,2,20,16,7
+8,FM,2,20,13,7
+9,AM,2,20,16,7
+10,FM,2,20,15,7
+11,AM,2,20,16,7
+12,FM,2,20,14,7
+13,AM,2,20,13,7
