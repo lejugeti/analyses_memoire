@@ -64,6 +64,7 @@ tidy_data = pd.DataFrame({"presented":sum_presented, "correct":sum_correct})
 tidy_data["percentage_correct"] = 100 * tidy_data.correct / tidy_data.presented
 
 tidy_data.to_csv("aggregated_data.txt")
+tidy_data.to_excel("aggregated_data.xlsx")
 
 
 #%% build the mean data frame just in case

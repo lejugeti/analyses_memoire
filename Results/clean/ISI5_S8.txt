@@ -1,0 +1,8 @@
+index,modulation_type,ISI,nb_presentation,nb_correct,subject
+0,AM,5,20,13,8
+1,FM,5,20,15,8
+2,FM,5,20,8,8
+3,AM,5,20,12,8
+4,FM,5,20,12,8
+5,AM,5,20,14,8
+6,AM,5,20,16,8
