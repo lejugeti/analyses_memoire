@@ -70,7 +70,7 @@ data["modulation_type"] = data["modulation_type"].astype("category")
 data["ISI"] = data["ISI"].astype("category")
 
 #%%plot individuel
-subject = 7
+subject = 5
 ind = plot_individuel(data, subject, save=True)
 
 #%% plot avec données moyennées

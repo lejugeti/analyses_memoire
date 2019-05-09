@@ -9,6 +9,7 @@ a = data[data["subject"]==2, c("subject", "ISI", "modulation_type", "percentage_
 b = data[data["subject"]==3, c("subject", "ISI", "modulation_type", "percentage_correct")]
 c = rbind(a,b)
 
-lel = ezANOVA(data = c, dv="percentage_correct", within=.("ISI","modulation_type"), wid="subject")
+lel = ezANOVA(data = data, dv="percentage_correct", within=.("ISI","modulation_type"), wid="subject")
 
 lol = aov_ez(id="subject", dv="percentage_correct", within=c("ISI", "modulation_type"), data=data)
+summary(lol)

@@ -17,3 +17,5 @@ index,modulation_type,ISI,nb_presentation,nb_correct,subject
 15,AM,3,20,15,5
 16,AM,3,20,15,5
 17,FM,3,20,15,5
+18,FM,3,20,11,5
+19,AM,3,20,12,5
