@@ -72,7 +72,8 @@ tidy_data.to_excel("aggregated_data.xlsx")
 data = pd.read_csv("aggregated_data.txt")
 
 data = data.groupby(["modulation_type", "ISI"])
-data = data.percentage_correct.apply(np.mean)
+data = pd.DataFrame(dict(percentage_correct= data.percentage_correct.apply(np.mean), 
+                     ecart_type = data.percentage_correct.apply(np.std)))
 
 data.to_csv("mean_data.txt")
 data.to_excel("mean_data.xlsx")

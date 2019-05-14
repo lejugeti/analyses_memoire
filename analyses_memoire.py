@@ -19,8 +19,9 @@ aov = pg.rm_anova(dv="percentage_correct", within=["modulation_type", "ISI"],
 
 pg.print_table(aov)
 
-
-
+clean_aov = aov[["Source","ddof1", "F", "p-unc", "p-GG-corr", "np2"]]
+clean_aov.columns = ["Variable", "ddl", "F-value", "p-value", "p-value corrigee", "partial eta-square"]
+clean_aov.to_excel("resultats_anova.xlsx")
 
 
 
