@@ -61,7 +61,15 @@ sum_correct = clean_agg.groupby(["subject", "modulation_type", "ISI"])["nb_corre
 tidy_data = pd.DataFrame({"presented":sum_presented, "correct":sum_correct})
 
 #colonne du percentage correct
-tidy_data["percentage_correct"] = 100 * tidy_data.correct / tidy_data.presented
+tidy_data["percentage_correct"] = round(100 * tidy_data.correct / tidy_data.presented)
+
+#création colonne des d'
+ref_d = pd.read_excel("d.xlsx")
+d = []
+for percentage in tidy_data.percentage_correct:
+    d.append(ref_d[ref_d.percentage==percentage].iat[0,1])
+
+tidy_data["d"] = d
 
 tidy_data.to_csv("aggregated_data.txt")
 tidy_data.to_excel("aggregated_data.xlsx")
@@ -73,7 +81,8 @@ data = pd.read_csv("aggregated_data.txt")
 
 data = data.groupby(["modulation_type", "ISI"])
 data = pd.DataFrame(dict(percentage_correct= data.percentage_correct.apply(np.mean), 
-                     ecart_type = data.percentage_correct.apply(np.std)))
+                     percent_sd = data.percentage_correct.apply(np.std), d = data.d.apply(np.mean), 
+                     d_sd = data.d.apply(np.std)))
 
 data.to_csv("mean_data.txt")
 data.to_excel("mean_data.xlsx")

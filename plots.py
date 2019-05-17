@@ -24,28 +24,69 @@ def plot_individuel(data, subject_nb, save=False):
     isi = range(1,6)
     fm = []
     am = []
+    
+    
     for time in isi:
         #iat[0,5] pour prendre la valeur de percentage correct dans la ligne
-        fm.append(data[data.modulation_type == "FM"][data.ISI== time].iat[0, 5])
-        am.append(data[data.modulation_type == "AM"][data.ISI== time].iat[0, 5])
+        fm.append(data[data.modulation_type == "FM"][data.ISI== time].iat[0, 6])
+        am.append(data[data.modulation_type == "AM"][data.ISI== time].iat[0, 6])
     
-    isi = isi = [500, 500*np.sqrt(2), 1000, 1000*np.sqrt(2), 2000]
+            
+    isi = isi = [500, 500 * np.sqrt(2), 1000, 1000 * np.sqrt(2), 2000]
     plt.plot(isi, fm, "o", color="red", linestyle="none", label="FM")
     plt.plot(isi, am, "o", color="blue", linestyle="none", label="AM")
     
     plt.xscale("log")
     #plt.xticks(isi)
-    plt.ylim(0, 100)
+    plt.ylim(0, 1.4)
     plt.legend(loc=0)
-    plt.yticks(range(0,101, 10))
+    plt.xlabel("ISI (ms)")
+    plt.ylabel("d'")
+    
+    plt.title(f"S{subject}")
+    
+    if save:
+        plt.savefig(f"figures/figure_S{subject}.pdf")
+    
+    plt.show()
+
+
+
+def plot_pilote(data, subject_nb, save=False):
+    """
+    plot les fonctions d'oubli avec 6 ISI au lieu de 5
+    """
+    
+    data = data[data.subject == subject_nb]
+    
+    isi = range(1,7)
+    fm = []
+    am = []
+    
+    for time in isi:
+        #iat[0,5] pour prendre la valeur de percentage correct dans la ligne
+        fm.append(data[data.modulation_type == "FM"][data.ISI== time].iat[0, 6])
+        am.append(data[data.modulation_type == "AM"][data.ISI== time].iat[0, 6])
+
+            
+    isi = isi = [500, 500 * np.sqrt(2), 1000, 1000 * np.sqrt(2), 2000, 4000]
+    plt.plot(isi, fm, "o", color="red", linestyle="none", label="FM")
+    plt.plot(isi, am, "o", color="blue", linestyle="none", label="AM")
+    
+    plt.xscale("log")
+    #plt.xticks(isi)
+    plt.ylim(0, 1.4)
+    plt.legend(loc=0)
     plt.xlabel("ISI (ms)")
     plt.ylabel("percentage correct")
     
     plt.title(f"S{subject}")
     if save:
-        plt.savefig(f"figures/figure_S{subject}.pdf")
+        plt.savefig(f"figures/figure_6_ISI.pdf")
+        
+        
     plt.show()
-    return data
+
 
 
 def plot_modulation(data, sujets, modulation=None, save=False):
@@ -56,15 +97,15 @@ def plot_modulation(data, sujets, modulation=None, save=False):
     
     for sub in sujets:
         temp = data[data.subject == sub]
-        plt.plot(isi, temp.percentage_correct, color=random_color(), 
+        temp = temp[temp.ISI<6]
+        plt.plot(isi, temp.d, 
                  label= f"{sub}")
     
     plt.xscale("log")
-    #plt.xticks(isi)
-    plt.yticks([i for i in range(0,101,10)])
     plt.xlabel("ISI (ms)")
-    plt.ylabel("percentage correct (%)")
-    plt.legend(loc=0)
+    plt.ylabel("d'")
+    plt.ylim(0, 1.4)
+    #plt.legend(loc=0)
     plt.title(f"Fonctions d'oubli individuelles pour {modulation}")
     if save:
         plt.savefig(f"figures/figure_{modulation}.pdf")
@@ -75,20 +116,21 @@ def plot_moyen(data, save=False):
     """
     plot les fonctions d'oubli moyennées pour AM et FM
     """
-   
+    #pour avoir le dataframe sans le 6e isi
+    data = data[data.ISI<6]
+    
     #valeurs à plot
     isi = [500, 500*np.sqrt(2), 1000, 1000*np.sqrt(2), 2000]
     am = data[data.modulation_type=="AM"]["percentage_correct"]
     fm = data[data.modulation_type=="FM"]["percentage_correct"]
-    am_error = data[data.modulation_type=="AM"]["ecart_type"]
-    fm_error = data[data.modulation_type=="FM"]["ecart_type"]
+    am_error = data[data.modulation_type=="AM"]["percent_sd"]
+    fm_error = data[data.modulation_type=="FM"]["percent_sd"]
     
     
-    plt.errorbar(isi, fm, yerr=fm_error, marker="o", color="red", alpha=0.5)
-    plt.errorbar(isi, am, yerr=am_error, marker="o", color="blue", alpha=0.5)
+    plt.errorbar(isi, fm, yerr=fm_error, marker="o", color="red", alpha=0.5, label="FM")
+    plt.errorbar(isi, am, yerr=am_error, marker="o", color="blue", alpha=0.5, label="AM")
     
     plt.xscale("log")
-    #plt.xticks(isi)
     plt.ylim(0, 100)
     plt.legend(loc=0)
     plt.xlabel("ISI (ms)")
@@ -98,23 +140,58 @@ def plot_moyen(data, save=False):
     if save:
         plt.savefig("figures/figure_moyenne.pdf")
     plt.show()
+
+def plot_moyen_d(data, save=False):
+    """
+    plot les fonctions d'oubli moyennées pour AM et FM
+    """
+    #pour avoir le dataframe sans le 6e isi
+    data = data[data.ISI<6]
     
+    #valeurs à plot
+    isi = [500, 500*np.sqrt(2), 1000, 1000*np.sqrt(2), 2000]
+    am = data[data.modulation_type=="AM"]["d"]
+    fm = data[data.modulation_type=="FM"]["d"]
+    am_error = data[data.modulation_type=="AM"]["d_sd"]
+    fm_error = data[data.modulation_type=="FM"]["d_sd"]
+    
+    
+    plt.errorbar(isi, fm, yerr=fm_error, marker="o", color="red", alpha=0.7, label="FM")
+    plt.errorbar(isi, am, yerr=am_error, marker="o", color="blue", alpha=0.7, label="AM")
+    
+    plt.xscale("log")
+    plt.ylim(0, 1.4)
+    plt.legend(loc=0)
+    plt.xlabel("ISI (ms)")
+    plt.ylabel("d'")
+    plt.title("averaged function")
+    #plt.yticks(range(0,101, 10))
+    if save:
+        plt.savefig("figures/figure_moyenne_d.pdf")
+    plt.show()
+
+
 data = pd.read_csv("aggregated_data.txt")
 data["subject"] = data["subject"].astype("category")
 data["modulation_type"] = data["modulation_type"].astype("category")
-data["ISI"] = data["ISI"].astype("category")
+#data["ISI"] = data["ISI"].astype("category")
 
 #%%plot individuel
-subject = 9
+subject = 8
 ind = plot_individuel(data, subject, save=True)
 
+#%% plot 6 ISI
+subject = 10
+plot_pilote(data, subject, save=True)
 #%% plot avec données moyennées
 mean_data = pd.read_csv("mean_data.txt")
 plot_moyen(mean_data, save=True)
 
+plot_moyen_d(mean_data, save=True)
+
 #%% plot individuels AM et FM
 
-subjects = [1,2,3,5,6,7,9]
+subjects = [1,2,3,5,6,7,8,9]
 
 plot_modulation(data, subjects, modulation="AM", save=True)
 plot_modulation(data, subjects, modulation="FM", save=True)
