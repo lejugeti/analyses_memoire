@@ -78,7 +78,7 @@ def plot_pilote(data, subject_nb, save=False):
     plt.ylim(0, 1.4)
     plt.legend(loc=0)
     plt.xlabel("ISI (ms)")
-    plt.ylabel("percentage correct")
+    plt.ylabel("d'")
     
     plt.title(f"S{subject}")
     if save:
@@ -106,9 +106,9 @@ def plot_modulation(data, sujets, modulation=None, save=False):
     plt.ylabel("d'")
     plt.ylim(0, 1.4)
     #plt.legend(loc=0)
-    plt.title(f"Fonctions d'oubli individuelles pour {modulation}")
+    plt.title(f"{modulation}")
     if save:
-        plt.savefig(f"figures/figure_{modulation}.pdf")
+        plt.savefig(f"figures/figure_{modulation}.png")
     plt.show()
 
 
@@ -135,7 +135,7 @@ def plot_moyen(data, save=False):
     plt.legend(loc=0)
     plt.xlabel("ISI (ms)")
     plt.ylabel("percentage correct (%)")
-    plt.title("averaged function")
+#    plt.title("averaged function")
     plt.yticks(range(0,101, 10))
     if save:
         plt.savefig("figures/figure_moyenne.pdf")
@@ -164,10 +164,10 @@ def plot_moyen_d(data, save=False):
     plt.legend(loc=0)
     plt.xlabel("ISI (ms)")
     plt.ylabel("d'")
-    plt.title("averaged function")
+#    plt.title("averaged function")
     #plt.yticks(range(0,101, 10))
     if save:
-        plt.savefig("figures/figure_moyenne_d.pdf")
+        plt.savefig("figures/figure_moyenne_d.png")
     plt.show()
 
 
@@ -191,7 +191,7 @@ plot_moyen_d(mean_data, save=True)
 
 #%% plot individuels AM et FM
 
-subjects = [1,2,3,5,6,7,8,9]
+subjects = [1,2,3,5,6,7,8,9,10]
 
 plot_modulation(data, subjects, modulation="AM", save=True)
 plot_modulation(data, subjects, modulation="FM", save=True)

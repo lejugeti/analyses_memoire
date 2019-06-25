@@ -64,7 +64,7 @@ tidy_data = pd.DataFrame({"presented":sum_presented, "correct":sum_correct})
 tidy_data["percentage_correct"] = round(100 * tidy_data.correct / tidy_data.presented)
 
 #création colonne des d'
-ref_d = pd.read_excel("d.xlsx")
+ref_d = pd.read_excel("table_d.xlsx")
 d = []
 for percentage in tidy_data.percentage_correct:
     d.append(ref_d[ref_d.percentage==percentage].iat[0,1])
@@ -72,7 +72,7 @@ for percentage in tidy_data.percentage_correct:
 tidy_data["d"] = d
 
 tidy_data.to_csv("aggregated_data.txt")
-tidy_data.to_excel("aggregated_data.xlsx")
+#tidy_data.to_excel("aggregated_data.xlsx")
 
 
 #%% build the mean data frame just in case
@@ -85,5 +85,5 @@ data = pd.DataFrame(dict(percentage_correct= data.percentage_correct.apply(np.me
                      d_sd = data.d.apply(np.std)))
 
 data.to_csv("mean_data.txt")
-data.to_excel("mean_data.xlsx")
+#data.to_excel("mean_data.xlsx")
 
